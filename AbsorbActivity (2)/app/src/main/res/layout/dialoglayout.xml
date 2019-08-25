@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tc="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="64dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        tools:layout_editor_absoluteX="206dp" />
+
+
+    <TextView
+        android:id="@+id/surtime"
+        style="FONT-SIZE: 18px"
+        android:layout_width="189dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="80dp"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="285dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="以上是暂停的限制时间,每次暂停最多三分钟，以免打断莫燃得工作进程,暂停三分钟以上推退出本次学习。"
+        android:textColor="#696969"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/surtime" />
+
+    <!--<com.example.absorbactivity.view.CirCleBarView-->
+        <!--android:id="@+id/upload_pic_count"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="72dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--tc:circleColor="#696969"-->
+        <!--tc:layout_constraintEnd_toEndOf="parent"-->
+        <!--tc:layout_constraintHorizontal_bias="0.498"-->
+        <!--tc:layout_constraintStart_toStartOf="parent"-->
+        <!--tc:layout_constraintTop_toBottomOf="@+id/loading"-->
+        <!--tc:ringBgColor="#696969"-->
+        <!--tc:ringColor="#696969" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
