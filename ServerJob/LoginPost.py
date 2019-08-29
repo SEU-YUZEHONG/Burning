@@ -38,7 +38,9 @@ class checkSchoolServer(object):
             data["userName"]=str(userName)
             r=sess.post(checkUrl,data=data)
             if r.text.find("验证码错误")!=-1:
-                return False
+                return "codeError"
+            elif r.text.find("密码错误"):
+                return "error"
             return True
         except Exception as e:
             print(e)

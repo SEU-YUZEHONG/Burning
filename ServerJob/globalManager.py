@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import random
+import string
 from LoginPost import checkSchoolServer
 
 _global_dict=checkSchoolServer()
@@ -12,5 +14,5 @@ class gol:
         _global_dict=schoolCheck
 
     def get_schoolCheck():
+        global _global_dict
         return _global_dict
-    

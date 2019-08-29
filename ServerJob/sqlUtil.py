@@ -23,6 +23,7 @@ class MysqlUtil(object):
             )
             # 创建一个游标对象
             self.cur = self.conn.cursor(pymysql.cursors.DictCursor)
+            #服务器开启进行数据库维护
             sql_TableCreate = "create table if not exists Users(userNumber int, userType int, userAccount char(20), currentlngtion int" +\
                 ", userAllTime double, userAim text)"
             sql_UserCheck = "select * from Users"
@@ -44,6 +45,7 @@ class MysqlUtil(object):
         try:
             global mysqlutil
             Js = json.loads(js)
+            #解析客户端请求并执行相应操作
             if Js["method"] == "userLogin":
                 return str(self.Login(Js["data"][0]))
             elif Js["method"] == "userCreate":
@@ -77,9 +79,10 @@ class MysqlUtil(object):
             worldList = []
             for Users in cursor:
                 worldList.append([Users])
-            if worldList == []:
-                self.Create(Js) #用户未登陆过，创建用户表格
             schoolCheck=gol.get_schoolCheck()
+            if worldList == [] and schoolCheck.checkLogin(Js["userPassword"],Js["userAccount"],Js["verCode"]):
+                self.Create(Js) #用户未登陆过，创建用户表格
+                return True
             return schoolCheck.checkLogin(Js["userPassword"],Js["userAccount"],Js["verCode"])
         except Exception as e:
             print("Login error ", str(e))
@@ -89,6 +92,7 @@ class MysqlUtil(object):
 
     def Create(self, Js):
         try:
+            #查询用户是否存在
             sqlQ = "select * from Users where userAccount='" + \
                 Js["userAccount"]+"'"
             print(sqlQ)
@@ -97,19 +101,23 @@ class MysqlUtil(object):
             worldList = []
             for Users in cursor:
                 worldList.append([Users])
+            #用户存在不允许再创建
             if worldList != []:
                 return "User exist"
+            #用户表格中插入用户信息
             sql = "insert into Users(userType,userAccount) values("+str(Js["userType"]) +\
                 ","+"'"+Js["userAccount"]+"')"
             print(sql)
             cursor = self.conn.cursor()
             cursor.execute(sql)
             self.conn.commit()
+            #创建用户Job表格
             sql_UserJobTable = "create table if not exists "+Js["userAccount"]+"Job(jobName char(20), " +\
                 "jobSetDuration double, jobCreateTime char(20), jobStartTime char(20), jobEndTime char(20), jobSusbendTime char(20), "+\
                 "jobType int, jobScene char(20), jobAlreadyTime double, Concentration int, Circularity int)"
             print(sql_UserJobTable)
             cursor.execute(sql_UserJobTable)
+            #创建用户Todo表格
             sql_UserToDoTable = "create table if not exists "+Js["userAccount"]+"Todo(jobName char(20), " +\
                 "jobSetDuration double, jobCreateTime char(20), jobStartTime char(20), jobEndTime char(20), jobSusbendTime char(20), "+\
                 "jobType int, jobScene char(20), jobAlreadyTime double, currentTime char(20), currentlngtion double, currentSlience double, tolgnition double)"
@@ -127,6 +135,7 @@ class MysqlUtil(object):
         try:
             cursor = self.conn.cursor()
             AllTime=0.0
+            #任务完成，更新用户AllTime
             if Js["jobSetDuration"] == Js["jobAlreadyTime"]:
                 sql_FindAllTime = "select userAllTime for Users where userAccount='" + \
                     str(Js["userAccount"])+"'"
@@ -136,6 +145,7 @@ class MysqlUtil(object):
                 sql_AddAllTime = "update User set userAllTime=" + \
                     str(AllTime+Js["jobSetDuration"])
                 print(sql_AddAllTime)
+            #增加用户记录
             sql_AddRecord = "insert into "+Js["userAccount"]+"Job values('"+str(Js["jobName"])+"'"+","+"'"\
                 + str(Js["jobSetDuration"])+"'"+","+"'"+str(Js["jobCreateTime"])+"'"+","+"'"+str(Js["jobStartTime"])+"'"+","+"'"\
                 + str(Js["jobEndTime"])+"'"+","+"'"+str(Js["jobSusbendTime"])+"'"+","+"'"+str(Js["jobType"])+"'"+","+"'"\
@@ -145,7 +155,7 @@ class MysqlUtil(object):
             print(sql_AddRecord)
             cursor.execute(sql_AddRecord)
             self.conn.commit()
-            return "True"
+            return "Job Add Success"
         except Exception as e:
             print("JobFinish error ", str(e))
             mysqlutil = MysqlUtil()
@@ -154,6 +164,7 @@ class MysqlUtil(object):
     
     def ToDoUpdata(self,Js):
         try:
+            #
             sql_CoverUserToDo = "delete from "+Js["userAccount"]+"Todo"
             print(sql_CoverUserToDo)
             cursor = self.conn.cursor()
