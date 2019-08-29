@@ -3,6 +3,7 @@ import random
 import string
 from LoginPost import checkSchoolServer
 
+#全局变量管理对象，维护从学校获取的登陆二维码
 _global_dict=checkSchoolServer()
 class gol:
     def _init():#初始化

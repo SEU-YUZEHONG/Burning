@@ -80,7 +80,7 @@ class MysqlUtil(object):
             for Users in cursor:
                 worldList.append([Users])
             schoolCheck=gol.get_schoolCheck()
-            if worldList == [] and schoolCheck.checkLogin(Js["userPassword"],Js["userAccount"],Js["verCode"]):
+            if worldList == [] and schoolCheck.checkLogin(Js["userPassword"],Js["userAccount"],Js["verCode"])==True:
                 self.Create(Js) #用户未登陆过，创建用户表格
                 return True
             return schoolCheck.checkLogin(Js["userPassword"],Js["userAccount"],Js["verCode"])
@@ -108,9 +108,7 @@ class MysqlUtil(object):
             sql = "insert into Users(userType,userAccount) values("+str(Js["userType"]) +\
                 ","+"'"+Js["userAccount"]+"')"
             print(sql)
-            cursor = self.conn.cursor()
             cursor.execute(sql)
-            self.conn.commit()
             #创建用户Job表格
             sql_UserJobTable = "create table if not exists "+Js["userAccount"]+"Job(jobName char(20), " +\
                 "jobSetDuration double, jobCreateTime char(20), jobStartTime char(20), jobEndTime char(20), jobSusbendTime char(20), "+\
@@ -155,21 +153,37 @@ class MysqlUtil(object):
             print(sql_AddRecord)
             cursor.execute(sql_AddRecord)
             self.conn.commit()
-            return "Job Add Success"
+            return "Job Recode Add Success"
         except Exception as e:
             print("JobFinish error ", str(e))
             mysqlutil = MysqlUtil()
             self.conn.rollback()
             return str(e)
     
+    def getToDoList(self,userAccount):
+        try:
+            #获取表中存储的ToDo任务
+            sql_TodoList = "select * from "
+            cursor = self.conn.cursor()
+            cursor.execute(sql_TodoList)
+            TodoList = []
+            for job in cursor:
+                TodoList.append([job])
+            print(TodoList)
+            return TodoList
+        except Exception as e:
+            print("getToDoList error ", str(e))
+            mysqlutil = MysqlUtil()
+            self.conn.rollback()
+            return str(e)
+    
     def ToDoUpdata(self,Js):
         try:
-            #
+            #ToDo表格与客户端动态同步
             sql_CoverUserToDo = "delete from "+Js["userAccount"]+"Todo"
             print(sql_CoverUserToDo)
             cursor = self.conn.cursor()
             cursor.execute(sql_CoverUserToDo)
-            self.conn.commit()
             for ToDo in Js["data"]:
                 sql_ToDoUpdata = "insert into "+Js["userAccount"]+"Todo values('"+str(ToDo["jobName"])+"'"+","+"'"\
                     + str(ToDo["jobSetDuration"])+"'"+","+"'"+str(ToDo["jobCreateTime"])+"'"+","+"'"+str(ToDo["jobStartTime"])+"'"+","+"'"\
@@ -189,12 +203,13 @@ class MysqlUtil(object):
 
     def TolngitionLeardBoard(self,Js):
         try:
+            #将燃度值比用户大的都挑选出来，计算得出用户排名
             sql_Select = "select userAccount from Users where currentlngtion>" + \
                 str(Js["currentlngtion"])
             print(sql_Select)
             cursor = self.conn.cursor()
             cursor.execute(sql_Select)
-            num = 0
+            num = 1
             for Users in cursor:
                 num = num+1
             self.conn.commit()
@@ -207,15 +222,16 @@ class MysqlUtil(object):
 
     def AllTimeLeaderBoard(self,Js):
         try:
+            #由用户名找到用户累计时间
             sql_SelectTime = "select userAllTime from Users where userAccount='" + \
             str(Js["userAccount"])+"'"
             cursor = self.conn.cursor()
             cursor.execute(sql_SelectTime)
             Time = cursor.fetchone()[0]
+            #挑选累计时间大于用户累计时间的，得出用户排名
             sql_Select = "select userAccount from Users where userAllTime>" + \
                 str(Time)
             print(sql_Select)
-            cursor = self.conn.cursor()
             cursor.execute(sql_Select)
             num = 0
             for Users in cursor:

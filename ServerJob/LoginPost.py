@@ -36,12 +36,25 @@ class checkSchoolServer(object):
             data["vercode"]=str(vercode)
             data["password"]=str(password)
             data["userName"]=str(userName)
-            r=sess.post(checkUrl,data=data)
-            if r.text.find("验证码错误")!=-1:
-                return "codeError"
-            elif r.text.find("密码错误"):
-                return "error"
-            return True
+            #传输用户名，密码，验证码并得到学校返回
+            r=sess.post(checkUrl,data=data) 
+            #从返回中找到alertError错误字段，识别错误类型
+            where=r.text.find('<body onload="alertError')
+            if where==-1:
+                return True
+            tex=r.text[where:where+50]
+            print(tex)
+            if tex.find("验证码")!=-1:
+                print("vercodeError")
+                return "vercodeError"
+            elif tex.find("用户名")!=-1:
+                print("passwordError")
+                return "passwordError"
+            return False
         except Exception as e:
             print(e)
             return False
+    
+if __name__ == "__main__":
+    school=checkSchoolServer()
+    school.checkLogin()
