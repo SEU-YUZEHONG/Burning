@@ -3,7 +3,6 @@ package com.example.loginproject.Client;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 
 import java.io.BufferedReader;
@@ -76,6 +75,7 @@ public class ServerClient implements Runnable {
             connection.setRequestProperty("Content-type", "application/json");
             connection.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
             connection.setRequestProperty("Charset", "UTF-8");
+            connection.setRequestProperty("Cookie",Cookie.cookie);
             writer=new PrintWriter(connection.getOutputStream());
             String pass=requestMethod;
 
@@ -99,6 +99,7 @@ public class ServerClient implements Runnable {
         catch(ConnectException e)
         {
             message.obj="Error";
+            message.what=4;
             handler.sendMessage(message);
         }
         catch(Exception e)
@@ -128,13 +129,21 @@ public class ServerClient implements Runnable {
             connection.setConnectTimeout(5000);
             InputStream in=connection.getInputStream();
             Bitmap bitmap= BitmapFactory.decodeStream(in);
+            String key=null;
+            for(int i=1;(key=connection.getHeaderFieldKey(i))!=null;i++)
+            {
+                if(key.equalsIgnoreCase("Cookie")) {
+                    System.out.println(connection.getHeaderField(i));
+                    Cookie.cookie=connection.getHeaderField(i);
+                }
+            }
             message.obj=bitmap;
             message.what=2;
             handler.sendMessage(message);
         }catch(ConnectException e)
         {
             message.obj="Error";
-            message.what=2;
+            message.what=4;
             handler.sendMessage(message);
         }catch(Exception e)
         {

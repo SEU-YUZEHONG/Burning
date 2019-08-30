@@ -8,6 +8,7 @@ import android.util.Patterns;
 
 import com.example.loginproject.data.LoginRepository;
 import com.example.loginproject.data.Result;
+import com.example.loginproject.data.model.Answer;
 import com.example.loginproject.data.model.LoggedInUser;
 import com.example.loginproject.R;
 
@@ -49,7 +50,10 @@ public class LoginViewModel extends ViewModel {
             loginResult.setValue(new LoginResult(new LoggedInUserView("Right")));
         }else if(result instanceof  Result.Wrong)
         {
-            loginResult.setValue(new LoginResult(R.string.login_wrong));
+            if(Answer.answer.equalsIgnoreCase("vercodeError"))
+                loginResult.setValue((new LoginResult(R.string.login_verWrong)));
+            else
+                loginResult.setValue(new LoginResult(R.string.login_wrong));
         }
         else {
             /*如果无法创建实例，那么就是登录失败*/

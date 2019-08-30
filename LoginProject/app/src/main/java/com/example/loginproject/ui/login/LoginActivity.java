@@ -61,6 +61,10 @@ public class LoginActivity extends AppCompatActivity {
                 case 2:
                     Bitmap bitmap=(Bitmap) msg.obj;idCode.setImageBitmap(bitmap);break;
                 case 3: System.out.println(msg.obj.toString()+" Please input again.");break;
+                case 4: Answer.answer=msg.obj.toString();System.out.println(Answer.answer);
+                    System.out.println("Get From subThread"+msg.toString());
+                    loginViewModel.login(username,
+                            password);break;
                 default:break;
             }
         }
@@ -122,15 +126,22 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.GONE);
                 if (loginResult.getError() != null) {
                     showLoginFailed(loginResult.getError());
+                    ServerClient s=null;
+                    try {
+                        s=new ServerClient("","GET",handler);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    new Thread(s).start();
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
+                    finish();
                 }
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
                 //登录界面一旦成果就取消
-                finish();
             }
         });
 
@@ -167,6 +178,28 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+        usernameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    /*loginViewModel.login(usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString());*/
+                    //return true;
+                }
+                return false;
+            }
+        });
+        idcodeEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    /*loginViewModel.login(usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString());*/
+                    //return true;
+                }
+                return false;
+            }
+        });
         loginButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -175,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                 password=passwordEditText.getText().toString();
                 System.out.println("use");
                 String method = "\"{\\\"method\\\":\\\"userLogin\\\",\\\"data\\\":[{\\\"userAccount\\\": \\\"" + username+ "\\\", " +
-                        "\\\"userPassword\\\": \\\"" + password + "\\\",\\\"verCode\\\":"+idcodeEditText.getText().toString()+",\\\"userType\\\":\\\"normal\\\"}]}\"";
+                        "\\\"userPassword\\\": \\\"" + password + "\\\",\\\"verCode\\\": \\\""+idcodeEditText.getText().toString()+"\\\",\\\"userType\\\":\\\"normal\\\"}]}\"";
                 ServerClient s = null;
                 try {
                     s = new ServerClient(method,"POST",handler);
