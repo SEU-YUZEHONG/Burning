@@ -52,16 +52,16 @@ class MysqlUtil(object):
             Js = json.loads(js)
             # 解析客户端请求并执行相应操作
             if Js["method"] == "userLogin":
-                return str(self.Login(Js["data"][0]))
+                return str(self.Login(Js["data"][0])) #用户登陆
             elif Js["method"] == "userCreate":
-                return str(self.Create(Js["data"][0]))
+                return str(self.Create(Js["data"][0])) #新增用户表格
             elif Js["method"] == "userJobFinish":
-                return str(self.JobFinish(Js))
-            elif Js["method"] == "userToDoUpdate":
-                return str(self.ToDoUpdata(Js))
-            elif Js["method"] == "userTolngitionLeaderBoard":
+                return str(self.JobFinish(Js)) #新增用户记录
+            elif Js["method"] == "userToDoUpdate": 
+                return str(self.ToDoUpdata(Js)) #维护用户ToDo列表
+            elif Js["method"] == "userTolngitionLeaderBoard": #计算用户燃度排行榜
                 return str(self.TolngitionLeardBoard(Js))
-            elif Js["method"] == "userAllTimeLeaderBoard":
+            elif Js["method"] == "userAllTimeLeaderBoard": #计算用户学习总时间排行
                 return str(self.AllTimeLeaderBoard(Js))
 
         except Exception as e:

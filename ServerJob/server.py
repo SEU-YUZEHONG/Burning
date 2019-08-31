@@ -15,6 +15,7 @@ sys.path.append('./*')
 
 # 服务端
 
+
 class MyServer(BaseHTTPRequestHandler):
     # 从a-zA-Z0-9生成指定数量的随机字符做为cookie
     ran_str_cookie = ''.join(random.sample(
@@ -26,6 +27,8 @@ class MyServer(BaseHTTPRequestHandler):
         schookCheck = checkSchoolServer()
         gol.set_schoolCheck(schookCheck)
         self.send_response(200)
+        self.ran_str_cookie = ''.join(random.sample(
+            string.ascii_letters + string.digits, 24))
         # 发送响应头部并附带cookie
         self.send_header('cookie: '+self.ran_str_cookie +
                          '\n'+'Content-type', 'application/json')
