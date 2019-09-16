@@ -186,24 +186,8 @@ class MysqlUtil(object):
         try:
             my_system = My_system()
             sys_data = defaultdict(list)
-            finalData = ''
-            data = '{"method": "getServerInfo"}'
-            # 从服务器列表读取现有服务器信息，并挨个查询拼接
-            try:
-                num = 0
-                for server in serverUnit:
-                    sess = requests.session()
-                    r1 = sess.post("http://%s:8089" %
-                                   (server), data=json.dumps(data))
-                    otherSys = r1.text
-                    num = num+1
-                    finalData = finalData + \
-                        ',{"server":"%s",%s}' % (str(server), str(otherSys))
-            except Exception as e:
-                sys_data = ''
-                finalData = ''
-            finalData = '{"data":[{"server":"%s",%s,%s,%s}%s]}' % (str("10.201.238.103"), str(my_system.get_disk_info()), str(
-                my_system.get_cpu_info()), str(my_system.get_memory_info()), finalData)
+            finalData = '%s,%s,%s' % (str(my_system.get_disk_info()), str(
+                my_system.get_cpu_info()), str(my_system.get_memory_info()))
             return finalData
         except Exception as e:
             print("System Info error ", str(e))
@@ -361,8 +345,12 @@ class MysqlUtil(object):
             for Users in cursor:
                 num = num+1
             # 用户表格中插入用户信息
+            if Js["userType"]=='normal':
+                type=1
+            else:
+                type=0
             sql_UserAdd = "insert into Users(currentIngtion,currentSilence,userNumber,userAccount,userAllTime,userAim,userType) values(0,0,%s,'%s',0,'Aim',%s)" \
-                % (str(num), str(Js["userAccount"]), str(Js["userType"]))
+                % (str(num), str(Js["userAccount"]), str(type))
             print(sql_UserAdd)
             cursor.execute(sql_UserAdd)
             # 创建用户Job表格

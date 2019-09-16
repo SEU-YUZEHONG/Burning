@@ -1,0 +1,54 @@
+sql_ToDoUpdata="insert into "+ToDo["userAccount"]+"Todo values('"+str(ToDo["jobName"])+"'"+","+"'"\
+                    +str(ToDo["jobSetDuration"])+"'"+","+"'"+str(ToDo["jobCreateTime"])+"'"+","+"'"+str(ToDo["jobStartTime"])+"'"+","+"'"\
+                    +str(ToDo["jobEndTime"])+"'"+","+"'"+str(ToDo["jobSusbendTime"])+"'"+","+"'"+str(ToDo["jobType"])+"'"+","+"'"\
+                    +str(ToDo["jobScene"])+"'"+","+"'"+str(ToDo["jobAlreadyTime"])+"'"+","+"'"+str(ToDo["currentTime"])+"'"+","+"'"\
+                    +str(ToDo["currentlngtion"])+str(ToDo["currentSlience"])+"'"+","+"'"+str(ToDo["Tolgnition"])+"')"
+
+{
+    "method":"userLogin",
+    "data":[
+        {
+            "ID":"username",
+            "passwd":"password",
+            "level":"admin/user"
+        }
+    ]
+}
+
+{
+    "method":"userCreate",
+    "data":[
+        {
+            "ID":"username",
+            "passwd":"password",
+            "level":"admin/user",
+            "time":"time"
+        }
+    ]
+}
+
+{
+    "method":"userData",
+    "cookid":(string)"cookie"
+    "data":[
+        {
+            "TodoList":[
+                {
+                    //内部采用键值对模式
+                    "jobName1":"description"
+                },
+                {
+                    "jobName2":"description"
+                }
+            ],
+            "燃度条":[
+                {
+                    "1:00":(int)value
+                },
+                {
+                    "2:00":(int)valuse
+                }
+            ]
+        }
+    ]
+}

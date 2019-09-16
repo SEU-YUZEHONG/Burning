@@ -1,0 +1,21 @@
+{
+    "method":"userToDoUpdate",
+    "userAccount":"lyMei",
+    "data":[
+        {
+            "jobName":"",
+            "jobSetDuration":"",
+            "jobCreateTime":"",
+            "jobStartTime":"",
+            "jobEndTime":"",
+            "jobSusbendTime":"",
+            "jobType":"",
+            "jobScene":"",
+            "jobAlreadyTime":"",
+            "currentTime":"",
+            "currentlngtion":"",
+            "currentSlience":"",
+            "tolgnition":""
+        }
+    ]
+}

@@ -1,0 +1,4 @@
+update user set authentication_string=password("Mly200211"),plugin='mysql_native_password' where user='root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'Mly200211' WITH GRANT OPTION;
+
+create table if not exists Job(jobName char(20), jobSetDuration double, jobCreateTime char(20), jobStartTime char(20), jobEndTime char(20), jobSusbendTime char(20), jobType int, jobScene char(20), jobAlreadyTime double, Concentration int, Circularity int);
