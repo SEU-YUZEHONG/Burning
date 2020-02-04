@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo_http——沙师弟</title>
+    <script>
+	    var xhr = new GetXmlHttpObject(); // Http传输类初始化
+        var urlPath = "http://www.shazhenyu.com:8889/getInfo?url=https://shazhenyu.blog.csdn.net";
+        // Http传输类
+        function GetXmlHttpObject() {
+                var xmlHttp=null;
+                try {
+                    // Firefox, Opera 8.0+, Safari
+                    console.log("XMLHttpRequest");
+                     xmlHttp=new XMLHttpRequest();
+                } catch (e) {
+                    // Internet Explorer
+                    try {
+                        console.log("Msxml2");
+                        xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch (e) {
+                        console.log("Microsoft");
+                        xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                }
+                return xmlHttp;
+        }
+        // get请求
+        function get_network(){
+            var url = urlPath;
+            xhr.onreadystatechange = toGetProcess;
+            xhr.open("GET", url);
+            xhr.send(null);
+            console.log("url:",url);
+        }
+        // 设置当获XHR对象获取到返回信息后执行以下代码
+        function toGetProcess() {
+            console.log("xhr:",xhr.readyState,xhr.status);
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    res = xhr.responseText;
+                    console.log("res",res);
+                    var obj = eval ("(" + res + ")");
+                    console.log("ok good");// obj为json的以下目录
+                    console.log("code:",obj.code);
+                    console.log("msg:",obj.msg);
+                    try {
+                        content_whData = obj.info;
+                        var result_div = document.getElementById("result");
+                        console.log("msg:",content_whData);
+                        console.log("result_div:",result_div);
+                        var artlist = content_whData.arts_list;
+                        var html_content = "博客名称："+content_whData.name+" " +
+                            "   "+content_whData.other+
+                            "<br/>文章链接："+content_whData.url+
+                            "<br/>原创数："+content_whData.info_yc_num+
+                            "<br/>粉丝数："+content_whData.info_fans_num+
+                            "<br/>喜欢数："+content_whData.info_lovers_num+
+                            "<br/>最新文章：<br/>";
+                        var html_context2 = "";
+                        for (var i = 0; i < artlist.length; i++) {
+                            html_context2 += "--------------------------------------------------------------------------------<br/>"
+                                +" - 名称：\""+artlist[i].name+"\"<br/> - 链接：\""+artlist[i].link+"\"<br/> - 创作日期：\""
+                                +artlist[i].date+"\"<br/> - 阅读量：\""+artlist[i].read+"\"<br/> - 评论数：\""+artlist[i].pl+"\"<br/>";
+                        }
+                        result_div.innerHTML="<p>"+html_content+html_context2+"</p>"
+                    } catch (e){
+                        console.log("file error:",e);
+                    }
+                }
+            } else {
+                console.log("可能存在跨域问题，解决即可");
+            }
+        }
+    </script>
+</head>
+
+<body>
+<button onclick="get_network()">
+    触发请求
+</button>
+<div id="result"></div>
+</body>
+</html>

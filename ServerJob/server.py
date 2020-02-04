@@ -15,6 +15,7 @@ import pymysql
 import threading
 import sys
 import random
+import time
 sys.path.append('./*')
 
 # 服务端
@@ -41,12 +42,14 @@ class MyServer(BaseHTTPRequestHandler):
         gol.set_schoolCheck(schookCheck, ran_str_cookie)
         # 发送维护的验证码
         self.wfile.write(gol.get_schoolCheck(ran_str_cookie).valcode.content)
+        time.sleep(1)
+        self.wfile.write(gol.get_schoolCheck(ran_str_cookie).valcode.content)
 
     # 处理post请求
     def do_POST(self):
         global mysqlutil
         self.send_response(200)
-        self.send_header('Content-type', 'json')
+        self.send_header('Content-type', 'txt')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
         head = str(self.headers)
@@ -83,6 +86,8 @@ class MyServer(BaseHTTPRequestHandler):
             respond = mysqlutil.mysqlAll(Js, ran_str_cookie)
             print(respond)
             # 反馈结果
+            self.wfile.write(str(respond).encode('utf-8'))
+            time.sleep(1)
             self.wfile.write(str(respond).encode('utf-8'))
         except Exception as e:
             self.wfile.write("json error ".encode('utf-8'))

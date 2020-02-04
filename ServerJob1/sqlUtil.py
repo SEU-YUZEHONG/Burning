@@ -190,10 +190,12 @@ class MysqlUtil(object):
             other_sys=''
             for server in serverUnit:
                 try:
+                    print(server)
                     re=requests.post(server,data=json.dumps(data))
                     other_sys=other_sys+'{%s}'%(re.text)
-            finalData = '{"data":[{%s,%s,%s}]' % (str(my_system.get_disk_info()), str(
-                my_system.get_cpu_info()), str(my_system.get_memory_info()),str(other_sys))
+                except Exception as e:
+                    print(e)
+            finalData = '{"data":[{%s,%s,%s},{%s,%s,%s}]}' % (str(my_system.get_disk_info()), str(my_system.get_cpu_info()), str(my_system.get_memory_info()),str(my_system.get_disk_info()), str(my_system.get_cpu_info()), str(my_system.get_memory_info()))
             return finalData
         except Exception as e:
             print("System Info error ", str(e))

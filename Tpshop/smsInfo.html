@@ -151,7 +151,7 @@
 				<div class="manage-detail">
 					<h6 class="h5">默燃的用户平台只需站点后台绑定账号并开启即可使用，多个站点均可通用用户余额</h6>
 					<div class="margin-tb manage-detail-con clearfix">
-						<span class="h5 fl">用户剩余：<em class="h2">5 </em>条</span>
+						<span class="h5 fl">用户剩余：<em class="h2">12 </em>条</span>
 						<input class="h5 recharge fl" type="button" value="删除用户" onclick="DeleteUser()">
 						<input class="h5 margin-large-left custom fl" type="button" value="自定义用户" onclick="AddUser()">
 					</div>
@@ -252,7 +252,7 @@
 			var data = '{"method":"getUserInfo"}';
 			$.ajax({
 				type: "POST",
-				url: "http://49.235.241.216:8089",
+				url: "http://localhost:8089",
 				data: data,
 				success(data) {
 					console.log(data)

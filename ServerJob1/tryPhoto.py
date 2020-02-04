@@ -4,9 +4,8 @@ import json
 headers = {
  "Accept":"*/*"
  }
-url = "http://49.235.241.216:9999"
-path = "IMG_0433.jpg"
-files = {'file': open(path, 'rb')}
+url = "http://49.235.241.216:8089"
+files = {"method":'getUserInfo'}
 r = requests.post(url, files=files)
 print (r.url)
 print (r.text)

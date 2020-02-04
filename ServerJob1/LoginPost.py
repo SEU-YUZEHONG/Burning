@@ -57,6 +57,6 @@ class checkSchoolServer(object):
             return False
 
 
-# if __name__ == "__main__":
-#    school = checkSchoolServer()
-#    school.checkLogin()
+if __name__ == "__main__":
+   school = checkSchoolServer()
+   school.checkLogin()
